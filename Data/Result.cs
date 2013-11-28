@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MowChat.Data
 {
-	abstract class ResultCollection<TCollection>
+    abstract public class ResultCollection<TCollection>
 	{
 		public TCollection Records { get; set; }
 		public Metadata Meta { get; set; }
@@ -18,12 +18,12 @@ namespace MowChat.Data
 		}
 	}
 
-	class Metadata
+    public class Metadata
 	{
 		public int Total { get; set; }
 	}
 
-	class ResultList<TRecord> : ResultCollection<List<TRecord>>, IEnumerable<TRecord>
+    public class ResultList<TRecord> : ResultCollection<List<TRecord>>, IEnumerable<TRecord>
 	{
 		public IEnumerator<TRecord> GetEnumerator()
 		{
@@ -36,7 +36,7 @@ namespace MowChat.Data
 		}
 	}
 
-	class ResultMap<TRecord> : ResultCollection<Dictionary<string, TRecord>>, IEnumerable<TRecord>
+    public class ResultMap<TRecord> : ResultCollection<Dictionary<string, TRecord>>, IEnumerable<TRecord>
 	{
 		public IEnumerator<TRecord> GetEnumerator()
 		{

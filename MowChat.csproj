@@ -79,6 +79,18 @@
     <Compile Include="CharacterSelect.Designer.cs">
       <DependentUpon>CharacterSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChatControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ChatControl.Designer.cs">
+      <DependentUpon>ChatControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChatWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChatWindow.Designer.cs">
+      <DependentUpon>ChatWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\AuthToken.cs" />
     <Compile Include="Data\Character.cs" />
     <Compile Include="Data\ChatChannel.cs" />
@@ -94,6 +106,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CharacterSelect.resx">
       <DependentUpon>CharacterSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChatControl.resx">
+      <DependentUpon>ChatControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChatWindow.resx">
+      <DependentUpon>ChatWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>

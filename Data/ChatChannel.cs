@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace MowChat.Data
 {
-	class ChatChannelList : ResultList<ChatChannel>
+    public class ChatChannelList : ResultList<ChatChannel>
 	{
 	}
 
-	class ChatChannel
+	public class ChatChannel
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }

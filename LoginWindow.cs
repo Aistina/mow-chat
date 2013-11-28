@@ -151,11 +151,21 @@ namespace MowChat
 			SetStatus(Status.Done);
 		
 			// Let's wait a second so the people can see the "Done" message... and kick off WebSync!
-			var t = new Timer {Interval = 1000};
+			var t = new Timer {Interval = 500};
 			t.Tick += delegate
 				{
+                    // Open the chat window now :)
+                    var window = new ChatWindow();
+                    window.FormClosing += delegate
+                    {
+                        Close();
+                    };
+                    window.SetChatChannels(channels);
+                    window.Show();
+
+                    // And close this one
 					t.Stop();
-					Close();
+					Hide();
 				};
 			Invoke((MethodInvoker) t.Start);
 		}
