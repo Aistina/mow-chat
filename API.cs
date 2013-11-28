@@ -62,7 +62,7 @@ namespace MowChat
 			{
 				_cookieValue = cookie.Value;
 			}
-            
+			
 			// Don't call callback if unauthorized, connectivity issues, or in maintenance
 			if (CheckLogin<T>(response) || CheckConnectiviy(response) || CheckMaintenance(response) || CheckError<T>(response)) return;
 
@@ -78,7 +78,7 @@ namespace MowChat
 		{
 			return response.ResponseStatus == ResponseStatus.Completed &&
 			       response.StatusCode == HttpStatusCode.Unauthorized &&
-			       typeof (T) != typeof (AuthToken);
+				   typeof(T) != typeof(AuthToken);
 		}
 
 		private static bool CheckConnectiviy(IRestResponse response)
@@ -89,13 +89,13 @@ namespace MowChat
 		private static bool CheckMaintenance(IRestResponse response)
 		{
 			return response.ResponseStatus == ResponseStatus.Completed &&
-			       response.StatusCode == HttpStatusCode.ServiceUnavailable;
+				   response.StatusCode == HttpStatusCode.ServiceUnavailable;
 		}
 
-        private static bool CheckError<T>(IRestResponse response)
-        {
-            return response.StatusCode != HttpStatusCode.OK &&
-                   typeof(T) != typeof(AuthToken);
-        }
+		private static bool CheckError<T>(IRestResponse response)
+		{
+			return response.StatusCode != HttpStatusCode.OK &&
+				   typeof(T) != typeof(AuthToken);
+		}
 	}
 }

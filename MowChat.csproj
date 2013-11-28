@@ -94,6 +94,7 @@
     <Compile Include="Data\AuthToken.cs" />
     <Compile Include="Data\Character.cs" />
     <Compile Include="Data\ChatChannel.cs" />
+    <Compile Include="Data\ChatMessage.cs" />
     <Compile Include="Data\Result.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="LoginWindow.cs">

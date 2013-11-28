@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MowChat.Data
 {
-    public class ChatChannelList : ResultList<ChatChannel>
+	public class ChatChannelList : ResultList<ChatChannel>
 	{
 	}
 

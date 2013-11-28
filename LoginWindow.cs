@@ -118,10 +118,10 @@ namespace MowChat
 			// Open character select window
 			Invoke((MethodInvoker) delegate
 				{
-			        var window = new CharacterSelect(user.Characters, OnCharacterChosen);
-			        window.Closing += OnCharacterSelectClosed;
-			        window.ShowDialog(this);
-                });
+					var window = new CharacterSelect(user.Characters, OnCharacterChosen);
+					window.Closing += OnCharacterSelectClosed;
+					window.ShowDialog(this);
+				});
 		}
 
 		private void OnCharacterSelectClosed(object sender, CancelEventArgs e)
@@ -154,16 +154,16 @@ namespace MowChat
 			var t = new Timer {Interval = 500};
 			t.Tick += delegate
 				{
-                    // Open the chat window now :)
-                    var window = new ChatWindow();
-                    window.FormClosing += delegate
-                    {
-                        Close();
-                    };
-                    window.SetChatChannels(channels);
-                    window.Show();
+					// Open the chat window now :)
+					var window = new ChatWindow();
+					window.FormClosing += delegate
+					{
+						Close();
+					};
+					window.SetChatChannels(channels);
+					window.Show();
 
-                    // And close this one
+					// And close this one
 					t.Stop();
 					Hide();
 				};
