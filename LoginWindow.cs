@@ -5,10 +5,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using MowChat.Data;
 using MowChat.Properties;
+using MetroFramework.Forms;
 
 namespace MowChat
 {
-	public partial class LoginWindow : Form
+	public partial class LoginWindow : MetroForm
 	{
 		private enum Status
 		{
@@ -115,9 +116,12 @@ namespace MowChat
 			SetStatus(Status.SelectCharacter);
 
 			// Open character select window
-			var window = new CharacterSelect(user.Characters, OnCharacterChosen);
-			window.Closing += OnCharacterSelectClosed;
-			Invoke((MethodInvoker) (() => window.ShowDialog(this)));
+			Invoke((MethodInvoker) delegate
+				{
+			        var window = new CharacterSelect(user.Characters, OnCharacterChosen);
+			        window.Closing += OnCharacterSelectClosed;
+			        window.ShowDialog(this);
+                });
 		}
 
 		private void OnCharacterSelectClosed(object sender, CancelEventArgs e)

@@ -9,7 +9,7 @@ namespace MowChat
 {
 	class API
 	{
-		private const string BaseUrl = "https://api.isotx.com/api/v4/";
+		private const string BaseUrl = "https://marchofwar.isotx.com/api/v4/";
 
 		private static API _instance;
 		public static API Instance
@@ -62,9 +62,9 @@ namespace MowChat
 			{
 				_cookieValue = cookie.Value;
 			}
-
+            
 			// Don't call callback if unauthorized, connectivity issues, or in maintenance
-			if (CheckLogin<T>(response) || CheckConnectiviy(response) || CheckMaintenance(response)) return;
+			if (CheckLogin<T>(response) || CheckConnectiviy(response) || CheckMaintenance(response) || CheckError<T>(response)) return;
 
 			if (response.Request.Resource == "auth/current")
 			{
@@ -91,5 +91,11 @@ namespace MowChat
 			return response.ResponseStatus == ResponseStatus.Completed &&
 			       response.StatusCode == HttpStatusCode.ServiceUnavailable;
 		}
+
+        private static bool CheckError<T>(IRestResponse response)
+        {
+            return response.StatusCode != HttpStatusCode.OK &&
+                   typeof(T) != typeof(AuthToken);
+        }
 	}
 }

@@ -8,10 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MowChat.Data;
+using MetroFramework.Controls;
+using MetroFramework.Forms;
 
 namespace MowChat
 {
-	public partial class CharacterSelect : Form
+	public partial class CharacterSelect : MetroForm
 	{
 		private readonly List<Character> _characters;
 		private readonly Action<Character> _onSelected;
@@ -41,7 +43,7 @@ namespace MowChat
 
 		private void AddButton(Character character, int y)
 		{
-			var button = new Button
+			var button = new MetroButton
 				{
 					Height = characterButton.Height,
 					Text = character.Name,
