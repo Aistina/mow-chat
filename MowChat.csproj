@@ -53,8 +53,9 @@
     <Reference Include="FM.WebSync">
       <HintPath>Dependencies\FM.WebSync.dll</HintPath>
     </Reference>
-    <Reference Include="MetroFramework">
-      <HintPath>packages\ModernUI.1.1.0.1\lib\net45\MetroFramework.dll</HintPath>
+    <Reference Include="MetroFramework, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\MetroFramework.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=104.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -97,6 +98,7 @@
     <Compile Include="Data\ChatMessage.cs" />
     <Compile Include="Data\Result.cs" />
     <Compile Include="Data\User.cs" />
+    <Compile Include="Data\WebsyncMessage.cs" />
     <Compile Include="LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +107,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Websync.cs" />
     <EmbeddedResource Include="CharacterSelect.resx">
       <DependentUpon>CharacterSelect.cs</DependentUpon>
     </EmbeddedResource>
@@ -127,7 +130,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -157,6 +159,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MetroFramework.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

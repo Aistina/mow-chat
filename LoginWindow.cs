@@ -120,7 +120,7 @@ namespace MowChat
 				{
 					var window = new CharacterSelect(user.Characters, OnCharacterChosen);
 					window.Closing += OnCharacterSelectClosed;
-					window.ShowDialog(this);
+					window.ShowDialog();
 				});
 		}
 

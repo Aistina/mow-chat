@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
 using MowChat.Data;
@@ -38,7 +31,6 @@ namespace MowChat
 				// Create the tab page that will hold the chat
 				var newTab = new MetroTabPage
 				{
-					CustomBackground = false,
 					HorizontalScrollbar = false,
 					HorizontalScrollbarBarColor = true,
 					HorizontalScrollbarHighlightOnWheel = false,
@@ -47,7 +39,6 @@ namespace MowChat
 					Name = string.Format("chatTab{0}", i),
 					Size = new System.Drawing.Size(589, 341),
 					Style = MetroFramework.MetroColorStyle.Blue,
-					StyleManager = null,
 					TabIndex = i,
 					Text = channel.Name,
 					Theme = MetroFramework.MetroThemeStyle.Light,
@@ -58,7 +49,11 @@ namespace MowChat
 				};
 
 				// Add our custom chat control
-				var chatControl = new ChatControl(channel);
+				var chatControl = new ChatControl(channel)
+				{
+				    //Size = newTab.Size,
+                    Width = 589
+				};
 
 				// Add to tab page
 				newTab.Controls.Add(chatControl);

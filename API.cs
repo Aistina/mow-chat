@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MowChat
 {
-	class API
+	public class API
 	{
 		private const string BaseUrl = "https://marchofwar.isotx.com/api/v4/";
 
