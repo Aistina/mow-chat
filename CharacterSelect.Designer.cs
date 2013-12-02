@@ -30,6 +30,7 @@ namespace MowChat
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CharacterSelect));
             this.characterButton = new MetroFramework.Controls.MetroButton();
             this.scrollPanel = new MetroFramework.Controls.MetroPanel();
             this.scrollPanel.SuspendLayout();
@@ -42,6 +43,7 @@ namespace MowChat
             this.characterButton.Size = new System.Drawing.Size(197, 35);
             this.characterButton.TabIndex = 2;
             this.characterButton.Text = "Character";
+            this.characterButton.UseSelectable = true;
             // 
             // scrollPanel
             // 
@@ -66,9 +68,10 @@ namespace MowChat
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(227, 384);
             this.Controls.Add(this.scrollPanel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "CharacterSelect";
-            this.ShadowType = MetroFormShadowType.DropShadow;
+            this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
             this.Text = "Select A Character";
             this.Load += new System.EventHandler(this.CharacterSelect_Load);
             this.scrollPanel.ResumeLayout(false);

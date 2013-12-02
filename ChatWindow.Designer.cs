@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChatWindow));
             this.chatTabs = new MetroFramework.Controls.MetroTabControl();
             this.SuspendLayout();
             // 
@@ -36,16 +37,14 @@
             this.chatTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chatTabs.FontSize = MetroFramework.MetroTabControlSize.Medium;
-            this.chatTabs.FontWeight = MetroFramework.MetroTabControlWeight.Light;
             this.chatTabs.Location = new System.Drawing.Point(23, 63);
             this.chatTabs.Name = "chatTabs";
+            this.chatTabs.Padding = new System.Drawing.Point(6, 8);
             this.chatTabs.Size = new System.Drawing.Size(597, 380);
             this.chatTabs.Style = MetroFramework.MetroColorStyle.Blue;
             this.chatTabs.TabIndex = 0;
-            this.chatTabs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.chatTabs.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.chatTabs.UseStyleColors = false;
+            this.chatTabs.UseSelectable = true;
             // 
             // ChatWindow
             // 
@@ -53,7 +52,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(643, 466);
             this.Controls.Add(this.chatTabs);
-            this.Location = new System.Drawing.Point(0, 0);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ChatWindow";
             this.Text = "Chat - March of War";
             this.ResumeLayout(false);
