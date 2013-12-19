@@ -52,7 +52,9 @@ namespace MowChat
 				var chatControl = new ChatControl(channel)
 				{
 				    //Size = newTab.Size,
-                    Width = 589
+                    Width = 589,
+					TabPage = newTab,
+					TabControl = chatTabs,
 				};
 
 				// Add to tab page

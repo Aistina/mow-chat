@@ -1,14 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Controls;
 using MowChat.Data;
 
 namespace MowChat
 {
-	public partial class ChatControl : MetroUserControl
+	public sealed partial class ChatControl : MetroUserControl
 	{
 	    private ChatChannel Channel { get; set; }
+		private int UnreadCount { get; set; }
+
+		public MetroTabPage TabPage { get; set; }
+
+		private MetroTabControl _tabControl;
+
+		public MetroTabControl TabControl
+		{
+			get { return _tabControl; }
+			set
+			{
+				_tabControl = value;
+
+				// Reset unread counter when opening the tab
+				value.SelectedIndexChanged += delegate
+					{
+						if (TabControl.SelectedTab == TabPage)
+							ResetUnreadCounter();
+					};
+			}
+		}
+
+		private static readonly Color[] FactionColors = new[]
+			{
+				Color.FromArgb(0x999bc3), // 1 = Alliance
+				Color.FromArgb(0x8ba477), // 2 = Junta
+				Color.FromArgb(0xa5a4a4), // 3 = Empire
+				Color.FromArgb(0x60bbce), // 4 = Republic
+				Color.FromArgb(0xe06666), // 5 = Union
+				Color.FromArgb(0xca9e37) // 6 = Warlords
+			};
 
 		public ChatControl(ChatChannel channel)
 		{
@@ -39,7 +71,7 @@ namespace MowChat
 		    };
 		}
 
-        private void SendMessage()
+		private void SendMessage()
         {
             var text = chatText.Text;
             chatText.Text = "";
@@ -58,12 +90,29 @@ namespace MowChat
 
 	        Invoke((MethodInvoker) delegate
             {
+				// Add messages to text box
                 foreach (var message in obj.ChatMessages)
                     AddMessage(message);
-	        });
+
+				// If tab is not active, show unread indicator
+	            if (TabControl.SelectedTab != TabPage)
+		            IncreaseUnreadCounter();
+            });
 	    }
 
-	    private void OnHistoryReceived(ChatMessageList list)
+		private void IncreaseUnreadCounter()
+		{
+			TabPage.Text = string.Format("{0} ({1})", Channel.Name, ++UnreadCount);
+		}
+
+		private void ResetUnreadCounter()
+		{
+			UnreadCount = 0;
+
+			TabPage.Text = Channel.Name;
+		}
+
+		private void OnHistoryReceived(ChatMessageList list)
 		{
 		    Invoke((MethodInvoker) delegate
 		    {
@@ -77,9 +126,49 @@ namespace MowChat
 
 	    private void AddMessage(ChatMessage message)
 		{
-		    messagesContainer.Text += string.Format("{3}[{0}] {1}: {2}",
-		        message.Date, message.Character.Name, message.Message, 
-                messagesContainer.Text.Length > 0 ? Environment.NewLine : "");
+		    if (messagesContainer.Text.Length > 0)
+				messagesContainer.AppendText(Environment.NewLine);
+
+			// Add message's sender to player store
+			PlayerStore.Instance.StorePlayer(message.Character);
+
+			// If the chat message mentions the selected character, highlight the line
+		    var highlighted = false;
+		    var oldBackColor = messagesContainer.SelectionBackColor;
+			if (message.Message.Contains(API.Instance.CurrentUser.SelectedCharacter.Name))
+			{
+				highlighted = true;
+				messagesContainer.SelectionBackColor = Color.LightGray;
+			}
+
+			// Add the timestamp and sender.
+			var oldColor = messagesContainer.SelectionColor;
+			messagesContainer.AppendText(message.Date + " ");
+		    messagesContainer.SelectionColor = FactionColors[message.Character.FactionId - 1];
+			messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
+			messagesContainer.AppendText("[" + message.Character.Name + "]");
+		    messagesContainer.SelectionFont = messagesContainer.Font;
+			messagesContainer.SelectionColor = oldColor;
+		    messagesContainer.AppendText(" ");
+			
+			// Loop over the sections of the text.
+			var sections = PlayerStore.Instance.FindPlayerReferences(message.Message);
+			foreach (var section in sections)
+			{
+				if (section.Character != null)
+				{
+					messagesContainer.SelectionColor = FactionColors[section.Character.FactionId - 1];
+					messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
+				}
+
+				messagesContainer.AppendText(section.Text);
+				messagesContainer.SelectionColor = oldColor;
+				messagesContainer.SelectionFont = messagesContainer.Font;
+			}
+
+			// Reset back color
+		    if (highlighted)
+				messagesContainer.SelectionBackColor = oldBackColor;
 
             // Scroll to end
 		    messagesContainer.Select(messagesContainer.Text.Length, 0);

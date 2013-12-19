@@ -1,6 +1,9 @@
-﻿namespace MowChat
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace MowChat
 {
-	partial class ChatControl
+	sealed partial class ChatControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -30,7 +33,7 @@
 		{
             this.chatText = new MetroFramework.Controls.MetroTextBox();
             this.sendButton = new MetroFramework.Controls.MetroButton();
-            this.messagesContainer = new MetroFramework.Controls.MetroTextBox();
+            this.messagesContainer = new RichTextBox();
             this.SuspendLayout();
             // 
             // chatText
@@ -64,11 +67,12 @@
             this.messagesContainer.Multiline = true;
             this.messagesContainer.Name = "messagesContainer";
             this.messagesContainer.ReadOnly = true;
-            this.messagesContainer.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.messagesContainer.ScrollBars = RichTextBoxScrollBars.Vertical;
             this.messagesContainer.Size = new System.Drawing.Size(512, 297);
-            this.messagesContainer.Style = MetroFramework.MetroColorStyle.Blue;
+			this.messagesContainer.Font = new Font("Calibri", 11f);
+            //this.messagesContainer.Style = MetroFramework.MetroColorStyle.Blue;
             this.messagesContainer.TabIndex = 3;
-            this.messagesContainer.Theme = MetroFramework.MetroThemeStyle.Light;
+            //this.messagesContainer.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
             // ChatControl
             // 
@@ -86,7 +90,8 @@
 		#endregion
 
         private MetroFramework.Controls.MetroTextBox chatText;
-        private MetroFramework.Controls.MetroButton sendButton;
-        private MetroFramework.Controls.MetroTextBox messagesContainer;
+		private MetroFramework.Controls.MetroButton sendButton;
+		//private MetroFramework.Controls.MetroTextBox messagesContainer;
+        private RichTextBox messagesContainer;
 	}
 }

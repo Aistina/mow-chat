@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.RegularExpressions;
 using MowChat.Data;
 using RestSharp;
 using System;
@@ -117,9 +118,13 @@ namespace MowChat
 			// Don't call callback if unauthorized, connectivity issues, or in maintenance
 			if (CheckLogin<T>(response) || CheckConnectiviy(response) || CheckMaintenance(response) || CheckError<T>(response)) return;
 
-			if (response.Request.Resource == "auth/current")
+			if (response.Request.Resource == "auth/current" || response.Request.Resource == "auth/consume")
 			{
 				CurrentUser = response.Data as User;
+			}
+			else if (Regex.IsMatch(response.Request.Resource, "players/[0-9]+/select") && CurrentUser != null)
+			{
+				CurrentUser.SelectedCharacter = response.Data as Character;
 			}
 
 			callback(response.Data);

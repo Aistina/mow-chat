@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe" /t:winexe /closed /targetplatform:"v4,C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5" /out:"..\March of War Chat.exe" .\bin\Release\MowChat.exe .\bin\Release\FM.dll .\bin\Release\FM.WebSync.dll .\bin\Release\MetroFramework.dll .\bin\Release\RestSharp.dll
