@@ -124,6 +124,14 @@ namespace MowChat
 		    });
 		}
 
+		private Color GetFactionColor(Character character)
+		{
+			if (character.FactionId >= 1 && character.FactionId <= 6)
+				return FactionColors[character.FactionId - 1];
+
+			return Color.Black;
+		}
+
 	    private void AddMessage(ChatMessage message)
 		{
 		    if (messagesContainer.Text.Length > 0)
@@ -144,7 +152,7 @@ namespace MowChat
 			// Add the timestamp and sender.
 			var oldColor = messagesContainer.SelectionColor;
 			messagesContainer.AppendText(message.Date + " ");
-		    messagesContainer.SelectionColor = FactionColors[message.Character.FactionId - 1];
+			messagesContainer.SelectionColor = GetFactionColor(message.Character);
 			messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
 			messagesContainer.AppendText("[" + message.Character.Name + "]");
 		    messagesContainer.SelectionFont = messagesContainer.Font;
@@ -157,7 +165,7 @@ namespace MowChat
 			{
 				if (section.Character != null)
 				{
-					messagesContainer.SelectionColor = FactionColors[section.Character.FactionId - 1];
+					messagesContainer.SelectionColor = GetFactionColor(section.Character);
 					messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
 				}
 

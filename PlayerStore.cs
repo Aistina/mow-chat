@@ -98,12 +98,14 @@ namespace MowChat
 				}
 
 				// Add the character mention to the result and continue after that
-				result.Add(new MessageSection(text.Substring(index, match.Value.Length), Characters[match.Value]));
+				result.Add(new MessageSection(text.Substring(index, match.Value.Length),
+				                              Characters.ContainsKey(match.Value) ? Characters[match.Value] : null));
 				text = text.Substring(index + match.Value.Length);
 			}
 
 			// Always add the remainder
-			result.Add(new MessageSection(text));
+			if (text.Length > 0)
+				result.Add(new MessageSection(text));
 
 			return result;
 		}
