@@ -12,13 +12,12 @@ namespace MowChat
 	    private ChatChannel Channel { get; set; }
 		private int UnreadCount { get; set; }
 
-		public MetroTabPage TabPage { get; set; }
+		public MetroTabPage TabPage { private get; set; }
 
 		private MetroTabControl _tabControl;
-
 		public MetroTabControl TabControl
 		{
-			get { return _tabControl; }
+			private get { return _tabControl; }
 			set
 			{
 				_tabControl = value;
@@ -32,15 +31,15 @@ namespace MowChat
 			}
 		}
 
-		private static readonly Color[] FactionColors = new[]
-			{
-				Color.FromArgb(0x999bc3), // 1 = Alliance
-				Color.FromArgb(0x8ba477), // 2 = Junta
-				Color.FromArgb(0xa5a4a4), // 3 = Empire
-				Color.FromArgb(0x60bbce), // 4 = Republic
-				Color.FromArgb(0xe06666), // 5 = Union
-				Color.FromArgb(0xca9e37) // 6 = Warlords
-			};
+		private static readonly Color[] FactionColors =
+		{
+			Color.FromArgb(0x999bc3), // 1 = Alliance
+			Color.FromArgb(0x8ba477), // 2 = Junta
+			Color.FromArgb(0xa5a4a4), // 3 = Empire
+			Color.FromArgb(0x60bbce), // 4 = Republic
+			Color.FromArgb(0xe06666), // 5 = Union
+			Color.FromArgb(0xca9e37) // 6 = Warlords
+		};
 
 		public ChatControl(ChatChannel channel)
 		{
@@ -77,10 +76,10 @@ namespace MowChat
             chatText.Text = "";
 
             // No callback needed since we'll receive the message via WebSync.
-            API.Instance.Post<ChatMessage>(null, string.Format("chat/channels/{0}", Channel.Id), new Dictionary<string, string>
-            {
-                { "message", text }
-            });
+			API.Instance.Post<ChatMessage>(null, string.Format("chat/channels/{0}", Channel.Id), new Dictionary<string, string>
+			{
+				{ "message", text }
+			});
         }
 
 	    private void OnMessageReceived(WebsyncMessage obj)
@@ -124,7 +123,7 @@ namespace MowChat
 		    });
 		}
 
-		private Color GetFactionColor(Character character)
+		private static Color GetFactionColor(Character character)
 		{
 			if (character.FactionId >= 1 && character.FactionId <= 6)
 				return FactionColors[character.FactionId - 1];
@@ -143,7 +142,7 @@ namespace MowChat
 			// If the chat message mentions the selected character, highlight the line
 		    var highlighted = false;
 		    var oldBackColor = messagesContainer.SelectionBackColor;
-			if (message.Message.Contains(API.Instance.CurrentUser.SelectedCharacter.Name))
+			if (PlayerStore.TextContainsMe(message.Message))
 			{
 				highlighted = true;
 				messagesContainer.SelectionBackColor = Color.LightGray;

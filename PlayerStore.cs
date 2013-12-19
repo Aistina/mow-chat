@@ -59,9 +59,10 @@ namespace MowChat
 		/// <param name="c">The character to add.</param>
 		public void StorePlayer(Character c)
 		{
-			if (Characters.ContainsKey(c.Name)) return;
+			var lowerName = c.Name.ToLowerInvariant();
+			if (Characters.ContainsKey(lowerName)) return;
 
-			Characters.Add(c.Name, c);
+			Characters.Add(lowerName, c);
 			Pattern = null;
 		}
 
@@ -70,9 +71,9 @@ namespace MowChat
 		/// </summary>
 		/// <param name="text">The text to check.</param>
 		/// <returns>True if the text contains the name of the current character.</returns>
-		public bool ContainsMe(string text)
+		public static bool TextContainsMe(string text)
 		{
-			return text.Contains(API.Instance.CurrentUser.SelectedCharacter.Name);
+			return Regex.IsMatch(text, API.Instance.CurrentUser.SelectedCharacter.Name, RegexOptions.IgnoreCase);
 		}
 
 		/// <summary>
@@ -81,7 +82,7 @@ namespace MowChat
 		/// </summary>
 		/// <param name="text">The text to check.</param>
 		/// <returns>A list of text sections.</returns>
-		public List<MessageSection> FindPlayerReferences(string text)
+		public IEnumerable<MessageSection> FindPlayerReferences(string text)
 		{
 			var pattern = CompilePattern();
 			var matches = Regex.Matches(text, pattern, RegexOptions.IgnoreCase);
@@ -98,8 +99,10 @@ namespace MowChat
 				}
 
 				// Add the character mention to the result and continue after that
-				result.Add(new MessageSection(text.Substring(index, match.Value.Length),
-				                              Characters.ContainsKey(match.Value) ? Characters[match.Value] : null));
+			    var lowerMatch = match.Value.ToLowerInvariant();
+				var character = Characters.ContainsKey(lowerMatch) ? Characters[lowerMatch] : null;
+
+				result.Add(new MessageSection(text.Substring(index, match.Value.Length), character));
 				text = text.Substring(index + match.Value.Length);
 			}
 
