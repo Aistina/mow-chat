@@ -34,10 +34,18 @@ namespace MowChat
 
 		private void LoginWindow_Load(object sender, EventArgs e)
 		{
+			// Wait for window to be closed to end some stuff.
+			Closing += OnClosing;
+
 			// Start by obtaining a token
 			API.Instance.Get<AuthToken>(OnTokenReceived, "auth/current");
 
 			SetStatus(Status.ContactingServer);
+		}
+
+		private static void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+		{
+			SessionPinger.StopPinging();
 		}
 
 		private void SetStatus(Status status)
@@ -99,7 +107,7 @@ namespace MowChat
 			API.Instance.Post<User>(OnLoginComplete, "auth/consume", new Dictionary<string, string>
 				{
 					{ "token", _token.Token },
-					{ "version", "1" }
+					{ "version", "5" }
 				});
 		}
 
@@ -114,6 +122,9 @@ namespace MowChat
 				});
 
 			SetStatus(Status.SelectCharacter);
+
+			// Start the session pinger
+			SessionPinger.StartPinging();
 
 			// Open character select window
 			Invoke((MethodInvoker) delegate

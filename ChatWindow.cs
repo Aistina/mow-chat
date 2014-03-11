@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
@@ -13,8 +15,16 @@ namespace MowChat
 		public ChatWindow()
 		{
 			ChannelTabs = new Dictionary<ChatChannel, MetroTabPage>();
+			Closing += OnClosing;
 
 			InitializeComponent();
+		}
+
+		private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+		{
+			if (!Websync.HasInstance) return;
+
+			Websync.Instance.DisconnectFromWebsync();
 		}
 
 		public void SetChatChannels(ChatChannelList list)

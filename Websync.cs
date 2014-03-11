@@ -31,7 +31,15 @@ namespace MowChat
             get { return _instance ?? (_instance = new Websync()); }
         }
 
-        /// <summary>
+		/// <summary>
+		/// Whether the WebSync manager singleton exists.
+		/// </summary>
+	    public static bool HasInstance
+	    {
+			get { return _instance != null; }
+	    }
+
+	    /// <summary>
         /// Constructor.
         /// </summary>
         private Websync()
@@ -45,8 +53,22 @@ namespace MowChat
         private void ConnectToWebsync()
         {
             _client = new Client(WebsyncUrl);
-            _client.Connect();
+	        _client.Connect(new ConnectArgs
+		        {
+			        OnSuccess = data => Logger.Print("Connected to WebSync."),
+		        });
         }
+
+		/// <summary>
+		/// Disconnect from WebSync.
+		/// </summary>
+		public void DisconnectFromWebsync()
+		{
+			if (!_client.IsConnected) return;
+
+			_client.Disconnect();
+			_instance = null;
+		}
 
         /// <summary>
         /// Subscribe to a WebSync channel.
@@ -60,6 +82,8 @@ namespace MowChat
                 {
                     OnReceive = data =>
                     {
+						Logger.Print("Received from WebSync, " + data.DataJson);
+
                         // Abuse RestSharp to deserialize JSON for us.
                         var response = new RestResponse<WebsyncMessage> { Content = data.DataJson };
                         var message = new JsonDeserializer().Deserialize<WebsyncMessage>(response);

@@ -99,6 +99,10 @@ namespace MowChat
 				request.AddCookie("mow_session", _cookieValue);
 			}
 
+	        Logger.Print(string.Format("Request to API, {0} {1}, {2}", method, endpoint,
+	                                   args != null
+		                                   ? string.Join(",", args.Select(x => x.Key + "=" + x.Value))
+		                                   : string.Empty));
 			_restClient.ExecuteAsync<T>(request, response => OnCallCompleted(response, callback));
 		}
 
@@ -109,7 +113,11 @@ namespace MowChat
         /// <param name="response">The API response.</param>
         /// <param name="callback">The function to call when the API call completes.</param>
 		private void OnCallCompleted<T>(IRestResponse<T> response, Action<T> callback)
-		{
+        {
+	        Logger.Print(string.Format("Response from API, {0} {1}, {2} {3}, {4}", response.Request.Method,
+	                                   response.Request.Resource, response.ResponseStatus, response.StatusCode,
+	                                   response.Content));
+
 			foreach (var cookie in response.Cookies.Where(cookie => cookie.Name == "mow_session"))
 			{
 				_cookieValue = cookie.Value;
