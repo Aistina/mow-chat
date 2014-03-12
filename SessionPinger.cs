@@ -81,7 +81,7 @@ namespace MowChat
 				// Wait 10 minutes or until the padlock is cancelled.
 				lock (_padlock)
 				{
-					Monitor.Wait(_padlock, TimeSpan.FromMinutes(1));
+					Monitor.Wait(_padlock, TimeSpan.FromMinutes(10));
 				}
 			}
 		}
