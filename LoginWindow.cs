@@ -129,6 +129,8 @@ namespace MowChat
 			// Open character select window
 			Invoke((MethodInvoker) delegate
 				{
+					Activate();
+
 					var window = new CharacterSelect(user.Characters, OnCharacterChosen);
 					window.Closing += OnCharacterSelectClosed;
 					window.ShowDialog();
@@ -154,7 +156,8 @@ namespace MowChat
 		{
 			SetStatus(Status.ObtainingChats);
 
-			API.Instance.Get<ChatChannelList>(OnChannelsObtained, "chat/channels");
+			API.Instance.Get<ChatChannelList>(OnChannelsObtained, "chat/channels",
+			                                  new Dictionary<string, string> {{"history", "10"}});
 		}
 
 		private void OnChannelsObtained(ChatChannelList channels)

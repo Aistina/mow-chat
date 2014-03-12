@@ -102,7 +102,7 @@ namespace MowChat
 	        Logger.Print(string.Format("Request to API, {0} {1}, {2}", method, endpoint,
 	                                   args != null
 		                                   ? string.Join(",", args.Select(x => x.Key + "=" + x.Value))
-		                                   : string.Empty));
+		                                   : "(no params)"));
 			_restClient.ExecuteAsync<T>(request, response => OnCallCompleted(response, callback));
 		}
 

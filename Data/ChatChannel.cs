@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MowChat.Data
 {
@@ -15,5 +16,7 @@ namespace MowChat.Data
 		public DateTime Created { get; set; }
 		public int Active { get; set; }
 		public string WebsyncChannel { get; set; }
+
+		public List<ChatMessage> Messages { get; set; }
 	}
 }

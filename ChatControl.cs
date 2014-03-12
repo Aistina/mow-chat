@@ -51,9 +51,12 @@ namespace MowChat
 		    Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
 			// Get some chat history
-			API.Instance.Get<ChatMessageList>(OnHistoryReceived, string.Format("chat/messages/{0}", Channel.Id));
+			if (channel.Messages == null || channel.Messages.Count == 0)
+				API.Instance.Get<ChatMessageList>(OnHistoryReceived, string.Format("chat/messages/{0}", Channel.Id));
+			else
+				OnHistoryReceived(channel.Messages);
 
-            // Receive messages from WebSync
+			// Receive messages from WebSync
             Websync.Instance.Subscribe(channel.WebsyncChannel, OnMessageReceived);
 
             // Events for sending chat message
@@ -113,14 +116,16 @@ namespace MowChat
 
 		private void OnHistoryReceived(ChatMessageList list)
 		{
-		    Invoke((MethodInvoker) delegate
-		    {
-                // Oldest is at the top oops
-		        list.Records.Reverse();
+			Invoke((MethodInvoker) (() => OnHistoryReceived(list.Records)));
+		}
 
-		        foreach (var message in list.Records)
-		            AddMessage(message);
-		    });
+		private void OnHistoryReceived(List<ChatMessage> messages)
+		{
+            // Oldest is at the top oops
+			messages.Reverse();
+
+			foreach (var message in messages)
+		        AddMessage(message);
 		}
 
 		private static Color GetFactionColor(Character character)

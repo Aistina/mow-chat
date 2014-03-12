@@ -2,23 +2,46 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace MowChat
 {
 	class Logger
 	{
+		/// <summary>
+		/// The logger singleton instance.
+		/// </summary>
 		private static Logger _instance;
-		private static string _fileName;
-		private static bool _loggingEnabled;
-		private static FileStream _stream;
 
+		/// <summary>
+		/// Print a message to the log file.
+		/// </summary>
+		/// <param name="msg">The message to write.</param>
 		[Conditional("DEBUG")]
 		public static void Print(string msg)
 		{
 			if (_instance == null) _instance = new Logger();
 
-			_instance.WriteToLog(msg);
+			ThreadPool.QueueUserWorkItem(delegate
+				{
+					_instance.WriteToLog(msg);
+				}, null);
 		}
+
+		/// <summary>
+		/// The name of the file to log to.
+		/// </summary>
+		private readonly string _fileName;
+
+		/// <summary>
+		/// Whether we should log to the file (set to false when file is not writeable).
+		/// </summary>
+		private readonly bool _loggingEnabled;
+
+		/// <summary>
+		/// The file stream to write to.
+		/// </summary>
+		private readonly FileStream _stream;
 
 		/// <summary>
 		/// Constructor. Attaches the file stream.
@@ -52,7 +75,6 @@ namespace MowChat
 		{
 			if (_stream == null) return;
 
-			WriteToLog("Ok doei");
 			lock (_stream)
 			{
 				_stream.Close();
@@ -63,12 +85,12 @@ namespace MowChat
 		/// Print a message to the log file.
 		/// </summary>
 		/// <param name="msg">The message to write.</param>
-		public void WriteToLog(string msg)
+		private void WriteToLog(string msg)
 		{
 			if (!_loggingEnabled) return;
 
 			// Add timestamp.
-			msg = "[" + DateTime.UtcNow.ToLongDateString() + "] " + msg + Environment.NewLine;
+			msg = "[" + DateTime.UtcNow + "] " + msg + Environment.NewLine;
 
 			// Write the text.
 			var info = Encoding.UTF8.GetBytes(msg);

@@ -49,7 +49,7 @@ namespace MowChat
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public SessionPinger()
+		private SessionPinger()
 		{
 			_thread = new Thread(TimedPing);
 			_thread.Start();
