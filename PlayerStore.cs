@@ -13,12 +13,12 @@ namespace MowChat
 		public class MessageSection
 		{
 			public string Text { get; private set; }
-			public Character Character { get; private set; }
+			public IHasCharacterData CharacterMention { get; private set; }
 
-			public MessageSection(string text, Character character = null)
+			public MessageSection(string text, IHasCharacterData character = null)
 			{
 				Text = text;
-				Character = character;
+				CharacterMention = character;
 			}
 		}
 
@@ -38,7 +38,7 @@ namespace MowChat
 		/// <summary>
 		/// Dictionary of all seen users.
 		/// </summary>
-		private Dictionary<string, Character> Characters { get; set; }
+		private Dictionary<string, IHasCharacterData> Characters { get; set; }
 
 		/// <summary>
 		/// A regex pattern to match any known player name.
@@ -50,15 +50,24 @@ namespace MowChat
 		/// </summary>
 		private PlayerStore()
 		{
-			Characters = new Dictionary<string, Character>();
+			Characters = new Dictionary<string, IHasCharacterData>();
 		}
 
 		/// <summary>
 		/// Add a character to the player store.
 		/// </summary>
 		/// <param name="c">The character to add.</param>
-		public void StorePlayer(Character c)
+		public void StorePlayer(IHasCharacterData c)
 		{
+			if (c.Name == null)
+			{
+				var cm = c as ChatMessage;
+				if (cm != null && cm.Character != null)
+					StorePlayer(cm.Character);
+
+				return;
+			}
+
 			var lowerName = c.Name.ToLowerInvariant();
 			if (Characters.ContainsKey(lowerName)) return;
 

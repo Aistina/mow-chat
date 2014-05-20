@@ -13,7 +13,7 @@ namespace MowChat
         /// <summary>
         /// The base URL to prepend to all API calls.
         /// </summary>
-		private const string BaseUrl = "https://marchofwar.isotx.com/api/v4/";
+		private const string BaseUrl = "https://marchofwar.isotx.com/api/v6/";
 
         /// <summary>
         /// The instance of the API singleton.
@@ -135,7 +135,8 @@ namespace MowChat
 				CurrentUser.SelectedCharacter = response.Data as Character;
 			}
 
-			callback(response.Data);
+			if (callback != null)
+				callback(response.Data);
 		}
 
         /// <summary>

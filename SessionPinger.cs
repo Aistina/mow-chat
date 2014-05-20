@@ -76,13 +76,14 @@ namespace MowChat
 		{
 			while (_continuePinging)
 			{
-				Ping();
-
 				// Wait 10 minutes or until the padlock is cancelled.
 				lock (_padlock)
 				{
 					Monitor.Wait(_padlock, TimeSpan.FromMinutes(10));
 				}
+
+				if (_continuePinging)
+					Ping();
 			}
 		}
 

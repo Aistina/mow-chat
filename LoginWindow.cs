@@ -50,6 +50,8 @@ namespace MowChat
 
 		private void SetStatus(Status status)
 		{
+			Logger.Print(string.Format("LoginWindow status swithing from {0} to {1}", _status, status));
+
 			string desiredText;
 			_status = status;
 

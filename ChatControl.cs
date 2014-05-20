@@ -128,10 +128,10 @@ namespace MowChat
 		        AddMessage(message);
 		}
 
-		private static Color GetFactionColor(Character character)
+		private static Color GetFactionColor(IHasCharacterData message)
 		{
-			if (character.FactionId >= 1 && character.FactionId <= 6)
-				return FactionColors[character.FactionId - 1];
+			if (message.FactionId >= 1 && message.FactionId <= 6)
+				return FactionColors[message.FactionId - 1];
 
 			return Color.Black;
 		}
@@ -142,7 +142,7 @@ namespace MowChat
 				messagesContainer.AppendText(Environment.NewLine);
 
 			// Add message's sender to player store
-			PlayerStore.Instance.StorePlayer(message.Character);
+			PlayerStore.Instance.StorePlayer(message);
 
 			// If the chat message mentions the selected character, highlight the line
 		    var highlighted = false;
@@ -156,9 +156,9 @@ namespace MowChat
 			// Add the timestamp and sender.
 			var oldColor = messagesContainer.SelectionColor;
 			messagesContainer.AppendText(message.Date + " ");
-			messagesContainer.SelectionColor = GetFactionColor(message.Character);
+			messagesContainer.SelectionColor = GetFactionColor(message);
 			messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
-			messagesContainer.AppendText("[" + message.Character.Name + "]");
+			messagesContainer.AppendText("[" + message.UserCharacterName + "]");
 		    messagesContainer.SelectionFont = messagesContainer.Font;
 			messagesContainer.SelectionColor = oldColor;
 		    messagesContainer.AppendText(" ");
@@ -167,9 +167,9 @@ namespace MowChat
 			var sections = PlayerStore.Instance.FindPlayerReferences(message.Message);
 			foreach (var section in sections)
 			{
-				if (section.Character != null)
+				if (section.CharacterMention != null)
 				{
-					messagesContainer.SelectionColor = GetFactionColor(section.Character);
+					messagesContainer.SelectionColor = GetFactionColor(section.CharacterMention);
 					messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
 				}
 
