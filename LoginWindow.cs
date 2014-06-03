@@ -109,7 +109,7 @@ namespace MowChat
 			API.Instance.Post<User>(OnLoginComplete, "auth/consume", new Dictionary<string, string>
 				{
 					{ "token", _token.Token },
-					{ "version", "5" }
+					{ "version", "6" }
 				});
 		}
 
