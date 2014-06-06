@@ -84,13 +84,25 @@ namespace MowChat
                     {
 						Logger.Print("Received from WebSync, " + data.DataJson);
 
-                        // Abuse RestSharp to deserialize JSON for us.
-                        var response = new RestResponse<WebsyncMessage> { Content = data.DataJson };
-                        var message = new JsonDeserializer().Deserialize<WebsyncMessage>(response);
+                        var wrapped = FromJson<WrappedWebsyncMessage>(data.DataJson);
+                        var message = FromJson<WebsyncMessage>(string.Join("", wrapped.m_dataJson));
 
                         callback(message);
                     }
                 });
+        }
+
+        /// <summary>
+        /// Deserialize a JSON string to an object of type T.
+        /// </summary>
+        /// <typeparam name="T">The expected object type.</typeparam>
+        /// <param name="json">The JSON string.</param>
+        /// <returns>An instance of T.</returns>
+        private static T FromJson<T>(string json)
+        {
+            // Abuse RestSharp to deserialize JSON for us.
+            var response = new RestResponse<T> { Content = json };
+            return new JsonDeserializer().Deserialize<T>(response);
         }
     }
 }
