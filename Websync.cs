@@ -11,7 +11,7 @@ namespace MowChat
         /// <summary>
         /// The websync server
         /// </summary>
-        private const string WebsyncUrl = "http://igmchatlx.isotx.com/websync.ashx";
+        private const string WebsyncUrl = "http://igmchatlxx.isotx.com/websync.ashx";
 
         /// <summary>
         /// The WebSync connection.
@@ -85,7 +85,19 @@ namespace MowChat
 						Logger.Print("Received from WebSync, " + data.DataJson);
 
                         var wrapped = FromJson<WrappedWebsyncMessage>(data.DataJson);
-                        var message = FromJson<WebsyncMessage>(string.Join("", wrapped.m_dataJson));
+
+                        WebsyncMessage message;
+                        switch (wrapped.m_version)
+                        {
+                            // Case 31668.
+                            case 1:
+                                message = FromJson<WebsyncMessage>(wrapped.m_dataJsonS);
+                                break;
+                            // Initial format did not specify version.
+                            default:
+                                message = FromJson<WebsyncMessage>(string.Join("", wrapped.m_dataJson));
+                                break;
+                        }
 
                         callback(message);
                     }
