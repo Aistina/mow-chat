@@ -18,6 +18,16 @@ namespace MowChat
 		private readonly List<Character> _characters;
 		private readonly Action<Character> _onSelected;
 
+        private static readonly String[] FactionSuffix =
+		{
+			" (EA)", // 1 = Alliance
+			" (LJ)", // 2 = Junta
+			" (SE)", // 3 = Empire
+			" (UR)", // 4 = Republic
+			" (SU)", // 5 = Union
+			" (AW)" // 6 = Warlords
+		};
+
 		public CharacterSelect(List<Character> characters, Action<Character> onSelected)
 		{
 			InitializeComponent();
@@ -43,10 +53,10 @@ namespace MowChat
 
 		private void AddButton(Character character, int y)
 		{
-			var button = new MetroButton
+            var button = new MetroButton
 				{
 					Height = characterButton.Height,
-					Text = character.Name,
+                    Text = character.Name + FactionSuffix[character.FactionId-1],
 					Top = y,
 					Left = characterButton.Left,
 					Width = characterButton.Width
