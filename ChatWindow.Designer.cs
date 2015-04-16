@@ -37,10 +37,11 @@
             this.chatTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chatTabs.Location = new System.Drawing.Point(23, 63);
+            this.chatTabs.Location = new System.Drawing.Point(46, 121);
+            this.chatTabs.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.chatTabs.Name = "chatTabs";
             this.chatTabs.Padding = new System.Drawing.Point(6, 8);
-            this.chatTabs.Size = new System.Drawing.Size(597, 380);
+            this.chatTabs.Size = new System.Drawing.Size(1194, 731);
             this.chatTabs.Style = MetroFramework.MetroColorStyle.Blue;
             this.chatTabs.TabIndex = 0;
             this.chatTabs.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -48,13 +49,15 @@
             // 
             // ChatWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(643, 466);
+            this.ClientSize = new System.Drawing.Size(1286, 896);
             this.Controls.Add(this.chatTabs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "ChatWindow";
-            this.Text = "Chat - March of War";
+            this.Padding = new System.Windows.Forms.Padding(40, 115, 40, 38);
+            this.Text = "Chat - Face Off";
             this.ResumeLayout(false);
 
 		}
