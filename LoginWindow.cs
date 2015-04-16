@@ -16,8 +16,6 @@ namespace MowChat
 			Init,
 			ContactingServer,
 			WaitingForLogin,
-			SelectCharacter,
-			SelectingCharacter,
 			ObtainingChats,
 			Done,
 		}
@@ -65,12 +63,6 @@ namespace MowChat
 					break;
 				case Status.WaitingForLogin:
 					desiredText = Resources.Login_WaitingForLogin;
-					break;
-				case Status.SelectCharacter:
-					desiredText = Resources.Login_SelectCharacter;
-					break;
-				case Status.SelectingCharacter:
-					desiredText = Resources.Login_SelectingCharacter;
 					break;
 				case Status.ObtainingChats:
 					desiredText = Resources.Login_ObtainingChats;
@@ -123,43 +115,13 @@ namespace MowChat
 					BringToFront();
 				});
 
-			SetStatus(Status.SelectCharacter);
+            SetStatus(Status.ObtainingChats);
+
+            API.Instance.Get<ChatChannelList>(OnChannelsObtained, "chat/channels",
+                                              new Dictionary<string, string> { { "history", "10" } });
 
 			// Start the session pinger
 			SessionPinger.StartPinging();
-
-			// Open character select window
-			Invoke((MethodInvoker) delegate
-				{
-					Activate();
-
-					var window = new CharacterSelect(user.Characters, OnCharacterChosen);
-					window.Closing += OnCharacterSelectClosed;
-					window.ShowDialog();
-				});
-		}
-
-		private void OnCharacterSelectClosed(object sender, CancelEventArgs e)
-		{
-			if (_status != Status.SelectingCharacter)
-			{
-				Invoke((MethodInvoker) Close);
-			}
-		}
-
-		private void OnCharacterChosen(Character character)
-		{
-			SetStatus(Status.SelectingCharacter);
-
-			API.Instance.Post<Character>(OnCharacterSelected, string.Format("players/{0}/select", character.Id));
-		}
-
-		private void OnCharacterSelected(Character character)
-		{
-			SetStatus(Status.ObtainingChats);
-
-			API.Instance.Get<ChatChannelList>(OnChannelsObtained, "chat/channels",
-			                                  new Dictionary<string, string> {{"history", "10"}});
 		}
 
 		private void OnChannelsObtained(ChatChannelList channels)
