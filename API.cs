@@ -39,6 +39,11 @@ namespace MowChat
 		private string _autorizationValue;
 
         /// <summary>
+        /// The latest recorded value of the session cookie.
+        /// </summary>
+	    private string _cookieValue;
+
+        /// <summary>
         /// The currently logged in user, if any.
         /// </summary>
 		public User CurrentUser { get; private set; }
@@ -98,12 +103,20 @@ namespace MowChat
             {
                 request.AddHeader("Authorization", string.Format("ISOTX user=\"{0}\"", _autorizationValue));
 			}
+            else if (!string.IsNullOrEmpty(_cookieValue))
+            {
+                request.AddCookie("mow2_session", _cookieValue);
+            }
 
 	        Logger.Print(string.Format("Request to API, {0} {1}, {2}", method, endpoint,
 	                                   args != null
 		                                   ? string.Join(",", args.Select(x => x.Key + "=" + x.Value))
 		                                   : "(no params)"));
-			_restClient.ExecuteAsync<T>(request, response => OnCallCompleted(response, callback));
+			_restClient.ExecuteAsync<T>(request, response =>
+			{
+			    response.Request = request; // ??
+			    OnCallCompleted(response, callback);
+			});
 		}
 
         /// <summary>
@@ -118,6 +131,7 @@ namespace MowChat
 	                                   response.Request.Resource, response.ResponseStatus, response.StatusCode,
 	                                   response.Content));
 
+            HandleCookieInfo(response);
 			HandleAuthorizationInfo(response);
 			
 			// Don't call callback if unauthorized, connectivity issues, or in maintenance
@@ -131,6 +145,18 @@ namespace MowChat
 			if (callback != null)
 				callback(response.Data);
 		}
+
+        /// <summary>
+        /// Extract the session cookie from the given response.
+        /// </summary>
+        /// <param name="response">The REST response from the server.</param>
+	    private void HandleCookieInfo(IRestResponse response)
+	    {
+	        foreach (var cookie in response.Cookies.Where(cookie => cookie.Name == "mow2_session"))
+	        {
+	            _cookieValue = cookie.Value;
+	        }
+	    }
 
         /// <summary>
         /// Extract autorization information from the given response.
