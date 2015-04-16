@@ -13,7 +13,7 @@ namespace MowChat
         /// <summary>
         /// The base URL to prepend to all API calls.
         /// </summary>
-		private const string BaseUrl = "https://marchofwar.isotx.com/api/v6/";
+		private const string BaseUrl = "https://faceoff.isotx.com/api/v1/";
 
         /// <summary>
         /// The instance of the API singleton.
@@ -34,9 +34,9 @@ namespace MowChat
 		private readonly RestClient _restClient;
 
         /// <summary>
-        /// The latest recorded value of the session cookie.
+        /// The latest recorded value of the authentication key.
         /// </summary>
-		private string _cookieValue;
+		private string _autorizationValue;
 
         /// <summary>
         /// The currently logged in user, if any.
@@ -94,9 +94,9 @@ namespace MowChat
 				}
 			}
 
-			if (!string.IsNullOrEmpty(_cookieValue))
-			{
-				request.AddCookie("mow_session", _cookieValue);
+            if (!string.IsNullOrEmpty(_autorizationValue))
+            {
+                request.AddHeader("Authorization", string.Format("ISOTX user=\"{0}\"", _autorizationValue));
 			}
 
 	        Logger.Print(string.Format("Request to API, {0} {1}, {2}", method, endpoint,
@@ -118,10 +118,7 @@ namespace MowChat
 	                                   response.Request.Resource, response.ResponseStatus, response.StatusCode,
 	                                   response.Content));
 
-			foreach (var cookie in response.Cookies.Where(cookie => cookie.Name == "mow_session"))
-			{
-				_cookieValue = cookie.Value;
-			}
+			HandleAuthorizationInfo(response);
 			
 			// Don't call callback if unauthorized, connectivity issues, or in maintenance
 			if (CheckLogin<T>(response) || CheckConnectiviy(response) || CheckMaintenance(response) || CheckError<T>(response)) return;
@@ -130,14 +127,33 @@ namespace MowChat
 			{
 				CurrentUser = response.Data as User;
 			}
-			else if (Regex.IsMatch(response.Request.Resource, "players/[0-9]+/select") && CurrentUser != null)
-			{
-				CurrentUser.SelectedCharacter = response.Data as Character;
-			}
 
 			if (callback != null)
 				callback(response.Data);
 		}
+
+        /// <summary>
+        /// Extract autorization information from the given response.
+        /// </summary>
+        /// <param name="response">The REST response from the server.</param>
+        private void HandleAuthorizationInfo(IRestResponse response)
+        {
+            var authorizationHeader =
+                response.Headers.FirstOrDefault(header =>
+                    string.Equals(header.Name, "Authorization-Info", StringComparison.InvariantCultureIgnoreCase) &&
+                    header.Value is string);
+
+            // If not found, bail.
+            if (authorizationHeader == null) return;
+
+            var r = new Regex("nextnonce=\"([^\"]+)\"");
+            var match = r.Match(authorizationHeader.Value.ToString());
+
+            if (!match.Success) return;
+
+            // Otherwise, set the next Authorization key.
+            _autorizationValue = match.Groups[1].Captures[0].Value;
+        }
 
         /// <summary>
         /// Check that the response status is not unauthorized, unless that's expected.
