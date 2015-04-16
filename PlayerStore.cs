@@ -82,7 +82,7 @@ namespace MowChat
 		/// <returns>True if the text contains the name of the current character.</returns>
 		public static bool TextContainsMe(string text)
 		{
-			return Regex.IsMatch(text, API.Instance.CurrentUser.SelectedCharacter.Name, RegexOptions.IgnoreCase);
+			return Regex.IsMatch(text, API.Instance.CurrentUser.Character.Name, RegexOptions.IgnoreCase);
 		}
 
 		/// <summary>

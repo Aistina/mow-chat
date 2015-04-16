@@ -14,7 +14,7 @@ namespace MowChat.Data
 		public string Type { get; set; }
 		public string TypeId { get; set; }
 		public DateTime Created { get; set; }
-		public int Active { get; set; }
+		public bool Active { get; set; }
 		public string WebsyncChannel { get; set; }
 
 		public List<ChatMessage> Messages { get; set; }

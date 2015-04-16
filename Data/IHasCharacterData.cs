@@ -2,7 +2,7 @@
 {
 	public interface IHasCharacterData
 	{
-		int FactionId { get; }
-		string Name { get; }
+        string Name { get; }
+        int? UserCharacterTier { get; }
 	}
 }

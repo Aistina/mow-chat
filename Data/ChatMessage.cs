@@ -12,7 +12,7 @@ namespace MowChat.Data
 	    public string Message { get; set; }
 	    public DateTime Date { get; set; }
 		public string UserCharacterName { get; set; }
-		public int FactionId { get; set; }
+        public int? UserCharacterTier { get; set; }
 
 		public string Name { get { return UserCharacterName; } }
 

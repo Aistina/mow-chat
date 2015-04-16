@@ -31,17 +31,7 @@ namespace MowChat
 			}
 		}
 
-		private static readonly Color[] FactionColors =
-		{
-			Color.FromArgb(0x999bc3), // 1 = Alliance
-			Color.FromArgb(0x8ba477), // 2 = Junta
-			Color.FromArgb(0xa5a4a4), // 3 = Empire
-			Color.FromArgb(0x60bbce), // 4 = Republic
-			Color.FromArgb(0xe06666), // 5 = Union
-			Color.FromArgb(0xca9e37) // 6 = Warlords
-		};
-
-		public ChatControl(ChatChannel channel)
+	    public ChatControl(ChatChannel channel)
 		{
 			InitializeComponent();
 
@@ -128,11 +118,9 @@ namespace MowChat
 		        AddMessage(message);
 		}
 
-		private static Color GetFactionColor(IHasCharacterData message)
+		private static Color GetMessageColor(IHasCharacterData message)
 		{
-			if (message.FactionId >= 1 && message.FactionId <= 6)
-				return FactionColors[message.FactionId - 1];
-
+			// TODO: In the future, indicate tier or admins.
 			return Color.Black;
 		}
 
@@ -156,7 +144,7 @@ namespace MowChat
 			// Add the timestamp and sender.
 			var oldColor = messagesContainer.SelectionColor;
 			messagesContainer.AppendText(message.Date + " ");
-			messagesContainer.SelectionColor = GetFactionColor(message);
+            messagesContainer.SelectionColor = GetMessageColor(message);
 			messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
 			messagesContainer.AppendText("[" + message.UserCharacterName + "]");
 		    messagesContainer.SelectionFont = messagesContainer.Font;
@@ -169,7 +157,7 @@ namespace MowChat
 			{
 				if (section.CharacterMention != null)
 				{
-					messagesContainer.SelectionColor = GetFactionColor(section.CharacterMention);
+                    messagesContainer.SelectionColor = GetMessageColor(section.CharacterMention);
 					messagesContainer.SelectionFont = new Font(messagesContainer.Font, FontStyle.Bold);
 				}
 
