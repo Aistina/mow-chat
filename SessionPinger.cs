@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace MowChat
 {
-	public class SessionPinger : IDisposable
+	public sealed class SessionPinger : IDisposable
 	{
 		/// <summary>
 		/// Instance of the session pinger.
