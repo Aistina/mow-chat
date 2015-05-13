@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MowChat.Data
 {
 	public class ChatMessageList : ResultList<ChatMessage>
 	{
 	}
+
+    public class SendChatResponse
+    {
+        public string Result { get; set; }
+        public List<Character> IgnoreList { get; set; }
+        public ChatMessage Message { get; set; }
+    }
 
 	public class ChatMessage : IHasCharacterData
 	{

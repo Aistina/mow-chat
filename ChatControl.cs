@@ -69,11 +69,17 @@ namespace MowChat
             chatText.Text = "";
 
             // No callback needed since we'll receive the message via WebSync.
-			API.Instance.Post<ChatMessage>(null, string.Format("chat/channels/{0}", Channel.Id), new Dictionary<string, string>
+            API.Instance.Post<SendChatResponse>(OnMessageSent, string.Format("chat/channels/{0}", Channel.Id), new Dictionary<string, string>
 			{
 				{ "message", text }
 			});
         }
+
+	    private void OnMessageSent(SendChatResponse obj)
+        {
+            if (!string.IsNullOrEmpty(obj.Result))
+                Invoke((MethodInvoker) (() => AddMessage(obj.Result)));
+	    }
 
 	    private void OnMessageReceived(WebsyncMessage obj)
 	    {
@@ -123,6 +129,18 @@ namespace MowChat
 			// TODO: In the future, indicate tier or admins.
 			return Color.Black;
 		}
+
+        private void AddMessage(string message)
+        {
+            if (messagesContainer.Text.Length > 0)
+                messagesContainer.AppendText(Environment.NewLine);
+
+            messagesContainer.AppendText(message);
+
+            // Scroll to end
+            messagesContainer.Select(messagesContainer.Text.Length, 0);
+            messagesContainer.ScrollToCaret();
+        }
 
 	    private void AddMessage(ChatMessage message)
 		{
